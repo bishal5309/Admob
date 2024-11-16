@@ -19,8 +19,15 @@ import com.google.android.gms.ads.interstitial.InterstitialAd;
 import com.google.android.gms.ads.interstitial.InterstitialAdLoadCallback;
 
 public class MainActivity extends AppCompatActivity {
+
+    //---------//
+
     private InterstitialAd mInterstitialAd;
     AdView mAdView;
+
+    //----------//
+
+
     ImageView img1, img2,img3,img4,img5,img6;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -59,21 +66,23 @@ public class MainActivity extends AppCompatActivity {
             showInterstitial();
         });
 
+
+
+        //--------------//
         mAdView = findViewById(R.id.adView);
         mAdView.setVisibility(View.GONE);
-
-
-
-
         if (getString(R.string.show_admob_ad).contains("ON")) {
             initAdmobAd();
             loadBannerAd();
             loadFullscreenAd();
         }
-
+        //----------------//
 
 
     }
+
+
+   //-------start----------//
 
     private void initAdmobAd() {
         // AdMob Initialization
@@ -148,4 +157,7 @@ public class MainActivity extends AppCompatActivity {
             Log.d("INTERSTITIAL_AD", "Interstitial ad is not ready yet.");
         }
     }
+
+    //--------------finished-----------//
+
 }
