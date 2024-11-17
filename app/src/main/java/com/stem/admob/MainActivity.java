@@ -3,6 +3,8 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
+
 import androidx.activity.EdgeToEdge;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
@@ -11,6 +13,7 @@ import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
 import com.google.android.gms.ads.AdListener;
 import com.google.android.gms.ads.AdRequest;
+import com.google.android.gms.ads.AdSize;
 import com.google.android.gms.ads.AdView;
 import com.google.android.gms.ads.FullScreenContentCallback;
 import com.google.android.gms.ads.LoadAdError;
@@ -23,7 +26,7 @@ public class MainActivity extends AppCompatActivity {
     //---------//
 
     private InterstitialAd mInterstitialAd;
-    AdView mAdView;
+    LinearLayout adContainerView;
 
     //----------//
 
@@ -69,8 +72,8 @@ public class MainActivity extends AppCompatActivity {
 
 
         //--------------//
-        mAdView = findViewById(R.id.adView);
-        mAdView.setVisibility(View.GONE);
+        adContainerView = findViewById(R.id.adContainerView);
+        adContainerView.setVisibility(View.GONE);
         if (getString(R.string.show_admob_ad).contains("ON")) {
             initAdmobAd();
             loadBannerAd();
@@ -95,15 +98,25 @@ public class MainActivity extends AppCompatActivity {
 
     // loadBannerAd method
     private void loadBannerAd() {
+        // Create a new ad view and set the ad unit ID and size
+        AdView adView = new AdView(this);
+        adView.setAdUnitId("ca-app-pub-3940256099942544/9214589741"); // Test Ad Unit ID
+        adView.setAdSize(AdSize.BANNER);
+
+        // Add the ad view to the container and load the ad
+        adContainerView.removeAllViews();
+        adContainerView.addView(adView);
+
+        // Start loading the ad
         AdRequest adRequest = new AdRequest.Builder().build();
-        mAdView.loadAd(adRequest);
-        mAdView.setAdListener(new AdListener() {
+        adView.loadAd(adRequest);
+        adView.setAdListener(new AdListener() {
             @Override
             public void onAdLoaded() {
                 if (BANNER_AD_CLICK_COUNT >= 2) {
-                    if (mAdView != null) mAdView.setVisibility(View.GONE);
+                    if (adContainerView != null) adContainerView.setVisibility(View.GONE);
                 } else {
-                    if (mAdView != null) mAdView.setVisibility(View.VISIBLE);
+                    if (adContainerView != null) adContainerView.setVisibility(View.VISIBLE);
                 }
             }
 
@@ -115,7 +128,7 @@ public class MainActivity extends AppCompatActivity {
             public void onAdClicked() {
                 BANNER_AD_CLICK_COUNT++;
                 if (BANNER_AD_CLICK_COUNT >= 2) {
-                    if (mAdView != null) mAdView.setVisibility(View.GONE);
+                    if (adContainerView != null)adContainerView.setVisibility(View.GONE);
                 }
             }
         });
